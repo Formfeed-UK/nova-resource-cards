@@ -50,7 +50,7 @@ Cards should extend the included `ResourceCard` class rather than the standard c
 Install the package in to a Laravel app that uses [Nova](https://nova.laravel.com) via composer:
 
 ```bash
-composer require formfeed-uk/nova-color-field
+composer require formfeed-uk/nova-resource-cards
 ```
 
 ## Usage
