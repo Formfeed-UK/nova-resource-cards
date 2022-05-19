@@ -1,0 +1,38 @@
+{
+    "name": "formfeed-uk/nova-resource-cards",
+    "description": "A Laravel Nova package to show cards on all CRUD pages.",
+    "homepage": "https://github.com/formfeed-uk/nova-resource-cards",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "nova",
+        "cards"
+    ],
+    "require": {
+        "php": "^7.4|^8",
+        "laravel/nova": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Formfeed\\ResourceCards\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Formfeed\\ResourceCards\\AssetServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

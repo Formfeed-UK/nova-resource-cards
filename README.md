@@ -1,1 +1,122 @@
-# resource-cards
+# Nova Resource Cards
+
+This [Laravel Nova](https://nova.laravel.com/) package adds the functionality to add Resource Cards at the top of pages.
+
+This documentation is a work in progress.
+
+## Requirements
+
+- `php: >=7.4`
+- `laravel/nova: ^4.0`
+
+## Features
+
+This package wraps the following Laravel Nova pages and adds the ability to display Resource Cards above them:
+
+- Index
+- Detail
+- Create
+- Update
+- Attach
+- Update Attached
+- Replicate
+
+As the package is wrapping the pages, it should be fairly robust with regards to Nova Updates.
+
+This package also includes more fine grained control over the pages the cards are displayed on, following the same logic as is used for Fields:
+
+- showOnIndex
+- showOnDetail
+- showOnCreating
+- showOnUpdating
+- showOnPreview
+- showOnAttach
+- showOnReplicate
+- hideFromIndex
+- hideFromDetail
+- hideWhenCreating
+- hideWhenUpdating
+- hideWhenAttaching
+- hideWhenReplicating
+- onlyOnIndex
+- onlyOnDetail
+- onlyOnForms (Now includes Attach and Replicate)
+- exceptOnForms (Now includes Attach and Replicate)
+
+Cards should extend the included `ResourceCard` class rather than the standard class, but otherwise can be used like regular cards.
+
+## Installation
+
+Install the package in to a Laravel app that uses [Nova](https://nova.laravel.com) via composer:
+
+```bash
+composer require formfeed-uk/nova-color-field
+```
+
+## Usage
+
+### General
+
+First create your Resource Card
+
+```php
+
+// MyResourceCard.php
+use Formfeed\ResourceCards\ResourceCard;
+
+class MyResourceCard extends ResourceCard {
+
+    ...
+
+}
+
+```
+
+Then simply include it like a normal card within your resource
+
+```php
+// MyNovaResource.php
+
+use App\MyResourceCard;
+
+...
+
+class MyNovaResource extends Resource {
+
+...
+
+    public function cards(NovaRequest  $request) {
+        return [
+            MyResourceCard::make($request)
+        ];
+    }
+
+...
+
+}
+```
+
+Optionally chain visibility and authorisations: 
+
+```php
+
+    public function cards(NovaRequest  $request) {
+        return [
+            MyResourceCard::make($request)
+                ->onlyOnForms()
+                ->canSee(function ($request) {
+                    return $request->user()->role === "admin";
+                }),
+        ];
+    }
+```
+
+It's that simple!
+
+## Todo:
+
+- Documentation on available variables passed with `$request` on each page type. For now check out `extraCardParams` in the Vue Files to see which variables you'll get
+
+## License
+
+Nova Resource Cards is open-sourced software licensed under the [MIT license](LICENSE.md).
