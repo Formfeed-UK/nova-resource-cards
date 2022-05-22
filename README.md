@@ -57,11 +57,16 @@ composer require formfeed-uk/nova-resource-cards
 
 ### General
 
-First create your Resource Card
+1) Create a card [according to the Nova Documentation](https://nova.laravel.com/docs/4.0/customization/cards.html) (or use an existing card if you wish to convert it to ResourceCards).
+
+2) Update your Card to extend ResourceCard instead of Card:
 
 ```php
 
 // MyResourceCard.php
+
+...
+
 use Formfeed\ResourceCards\ResourceCard;
 
 class MyResourceCard extends ResourceCard {
@@ -72,7 +77,7 @@ class MyResourceCard extends ResourceCard {
 
 ```
 
-Then simply include it like a normal card within your resource
+3) Then simply include it like a normal card within your resource:
 
 ```php
 // MyNovaResource.php
