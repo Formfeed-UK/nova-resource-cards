@@ -30,6 +30,7 @@ export default {
 
     extraCardParams() {
       return {
+        resourceName: this.resourceName,
         display: "index",
       };
     },

@@ -2,7 +2,7 @@
 
 This [Laravel Nova](https://nova.laravel.com/) package adds the functionality to add Resource Cards at the top of pages.
 
-This documentation is a work in progress.
+I consider this package feature complete, however I am open to feature requests and pull requests, if there's something you'd like to see feel free to submit an issue. 
 
 ## Requirements
 
@@ -113,9 +113,69 @@ Optionally chain visibility and authorisations:
 
 It's that simple!
 
-## Todo:
+## Available parameters
 
-- Documentation on available variables passed with `$request` on each page type. For now check out `extraCardParams` in the Vue Files to see which variables you'll get
+There are a number of parameters available to your card, depending on the page the card is currently on. These parameters are available on the request object as query parameters.
+
+Note: Just because these parameters are available doesn't mean they will be populated for any given request. 
+
+### Index:
+- resourceName
+- display: "index"
+
+### Detail:
+- resourceName
+- resourceId
+- display: "detail"
+
+### Create:
+- resourceName
+- viaResource
+- viaResourceId
+- viaRelationship
+- display: "create"
+
+### Update:
+- resourceName
+- resourceId
+- viaResource
+- viaResourceId
+- viaRelationship
+- display: "update"
+
+### Replicate:
+- resourceName
+- resourceId
+- viaResource
+- viaResourceId
+- viaRelationship
+- display: "replicate"
+
+### Attach:
+- resourceName
+- resourceId
+- viaResource
+- viaResourceId
+- viaRelationship
+- parentResource
+- polymorphic
+- formUniqueId
+- relatedResourceName
+- display: "attach"
+
+### Update Attached:
+- resourceName
+- resourceId
+- viaResource
+- viaResourceId
+- viaRelationship
+- parentResource
+- polymorphic
+- formUniqueId:
+- relatedResourceName
+- relatedResourceId
+- viaPivotId
+- display: "updateAttached"
 
 ## License
 
