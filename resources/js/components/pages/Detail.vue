@@ -26,7 +26,7 @@ export default {
   
   computed: {
     cardsEndpoint() {
-      return `/nova-api/${this.resourceName}/cards`;
+      return `/nova-vendor/resource-cards/${this.resourceName}/cards`;
     },
 
     extraCardParams() {
