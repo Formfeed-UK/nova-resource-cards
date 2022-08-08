@@ -52,6 +52,13 @@ class ResourceCard extends Card {
     public $showOnReplicate = true;
 
     /**
+     * Indicates if the element should be shown on the lens view.
+     *
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest, mixed):bool)|bool
+     */
+    public $showOnLens = true;
+
+    /**
      * Specify that the element should be hidden from the index view.
      *
      * @param  (callable():bool)|bool  $callback
@@ -60,6 +67,22 @@ class ResourceCard extends Card {
     public function hideFromIndex($callback = true)
     {
         $this->showOnIndex = is_callable($callback) ? function () use ($callback) {
+            return ! call_user_func_array($callback, func_get_args());
+        }
+        : ! $callback;
+
+        return $this;
+    }
+
+    /**
+     * Specify that the element should be hidden from the lens view.
+     *
+     * @param  (callable():bool)|bool  $callback
+     * @return $this
+     */
+    public function hideFromLens($callback = true)
+    {
+        $this->showOnLens = is_callable($callback) ? function () use ($callback) {
             return ! call_user_func_array($callback, func_get_args());
         }
         : ! $callback;
@@ -163,6 +186,19 @@ class ResourceCard extends Card {
     }
 
     /**
+     * Specify that the element should be hidden from the lens view.
+     *
+     * @param  (callable():bool)|bool  $callback
+     * @return $this
+     */
+    public function showOnLens($callback = true)
+    {
+        $this->showOnLens = $callback;
+
+        return $this;
+    }
+
+    /**
      * Specify that the element should be hidden from the detail view.
      *
      * @param  (callable():bool)|bool  $callback
@@ -259,6 +295,22 @@ class ResourceCard extends Card {
         return $this->showOnIndex;
     }
 
+        /**
+     * Check showing on Lens.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  mixed  $resource
+     * @return bool
+     */
+    public function isShownOnLens(NovaRequest $request, $resource): bool
+    {
+        if (is_callable($this->showOnLens)) {
+            $this->showOnLens = call_user_func($this->showOnLens, $request, $resource);
+        }
+
+        return $this->showOnLens;
+    }
+
     /**
      * Determine if the field is to be shown on the detail view.
      *
@@ -345,6 +397,25 @@ class ResourceCard extends Card {
         $this->showOnUpdate = false;
         $this->showOnReplicate = false;
         $this->showOnAttach = false;
+        $this->showOnLens = false;
+
+        return $this;
+    }
+
+        /**
+     * Specify that the element should only be shown on the lens view.
+     *
+     * @return $this
+     */
+    public function onlyOnLens()
+    {
+        $this->showOnIndex = false;
+        $this->showOnDetail = false;
+        $this->showOnCreation = false;
+        $this->showOnUpdate = false;
+        $this->showOnReplicate = false;
+        $this->showOnAttach = false;
+        $this->showOnLens = true;
 
         return $this;
     }
@@ -364,6 +435,7 @@ class ResourceCard extends Card {
         $this->showOnUpdate = false;
         $this->showOnReplicate = false;
         $this->showOnAttach = false;
+        $this->showOnLens = false;
 
         return $this;
     }
@@ -381,6 +453,7 @@ class ResourceCard extends Card {
         $this->showOnUpdate = true;
         $this->showOnReplicate = true;
         $this->showOnAttach = true;
+        $this->showOnLens = false;
 
         return $this;
     }
@@ -398,6 +471,7 @@ class ResourceCard extends Card {
         $this->showOnUpdate = false;
         $this->showOnReplicate = false;
         $this->showOnAttach = false;
+        $this->showOnLens = true;
 
         return $this;
     }
@@ -411,6 +485,7 @@ class ResourceCard extends Card {
             "showOnUpdate" => $this->showOnUpdate,
             "showOnAttach" => $this->showOnAttach,
             "showOnReplicate" => $this->showOnReplicate,
+            "showOnLens" => $this->showOnLens,
         ], parent::jsonSerialize());
         $jsonReturn['onlyOnDetail'] = null;
         return $jsonReturn;

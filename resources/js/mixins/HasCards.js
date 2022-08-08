@@ -72,6 +72,10 @@ export default {
       return this.replicateCards.length > 0;
     },
 
+    shouldShowLensCards() {
+      return this.lensCards.length > 0;
+    },
+
     indexCards() {
       return filter(this.cards, c => c.showOnIndex != false && c.resourceCard == true);
     },
@@ -94,6 +98,10 @@ export default {
 
     replicateCards() {
       return filter(this.cards, c => c.showOnReplicate != false  && c.resourceCard == true);
+    },
+
+    lensCards() {
+      return filter(this.cards, c => c.showOnLens != false  && c.resourceCard == true);
     },
 
     /**
