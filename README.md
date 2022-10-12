@@ -20,6 +20,8 @@ This package wraps the following Laravel Nova pages and adds the ability to disp
 - Attach
 - Update Attached
 - Replicate
+- Lens
+- Dashboard
 
 As the package is wrapping the pages, it should be fairly robust with regards to Nova Updates.
 
@@ -32,8 +34,12 @@ This package also includes more fine grained control over the pages the cards ar
 - showOnPreview
 - showOnAttach
 - showOnReplicate
+- showOnLens
+- showOnDashboard
 - hideFromIndex
 - hideFromDetail
+- hideFromDashboard
+- hideFromLens
 - hideWhenCreating
 - hideWhenUpdating
 - hideWhenAttaching
@@ -41,6 +47,8 @@ This package also includes more fine grained control over the pages the cards ar
 - onlyOnIndex
 - onlyOnDetail
 - onlyOnForms (Now includes Attach and Replicate)
+- onlyOnLens
+- onlyOnDashboard
 - exceptOnForms (Now includes Attach and Replicate)
 
 Cards should extend the included `ResourceCard` class rather than the standard class, but otherwise can be used like regular cards.
@@ -181,6 +189,15 @@ Note: Just because these parameters are available doesn't mean they will be popu
 - relatedResourceId
 - viaPivotId
 - display: "updateAttached"
+
+### Lens:
+- resourceName
+- lens
+- display: "lens
+
+### Dashboard:
+- resourceName: Dashboard Name
+- display: "dashboard"
 
 ## License
 
