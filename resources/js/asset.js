@@ -9,6 +9,7 @@ Nova.booting(app => {
     Nova.inertia("Original.Nova.UpdateAttached", Nova.pages["Nova.UpdateAttached"]);
     Nova.inertia("Original.Nova.Replicate", Nova.pages["Nova.Replicate"]);
     Nova.inertia("Original.Nova.Lens", Nova.pages["Nova.Lens"]);
+    Nova.inertia("Original.Nova.Dashboard", Nova.pages["Nova.Dashboard"]);
 
     Nova.inertia("Nova.Detail", require("./components/pages/Detail").default);
     Nova.inertia("Nova.Update", require("./components/pages/Update").default);
@@ -17,6 +18,7 @@ Nova.booting(app => {
     Nova.inertia("Nova.Attach", require("./components/pages/Attach").default);
     Nova.inertia("Nova.UpdateAttached", require("./components/pages/UpdateAttached").default);
     Nova.inertia("Nova.Lens", require("./components/pages/Lens").default);
+    Nova.inertia("Nova.Dashboard", require("./components/pages/Dashboard").default);
 
 
 
