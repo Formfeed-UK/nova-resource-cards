@@ -3,6 +3,7 @@
 namespace Formfeed\ResourceCards;
 
 use Laravel\Nova\Card;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ResourceCard extends Card {
 
@@ -52,6 +53,20 @@ class ResourceCard extends Card {
     public $showOnReplicate = true;
 
     /**
+     * Indicates if the element should be shown on the lens view.
+     *
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest, mixed):bool)|bool
+     */
+    public $showOnLens = true;
+
+    /**
+     * Indicates if the element should be shown on the dashboard view.
+     *
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest, mixed):bool)|bool
+     */
+    public $showOnDashboard = true;
+
+    /**
      * Specify that the element should be hidden from the index view.
      *
      * @param  (callable():bool)|bool  $callback
@@ -60,6 +75,22 @@ class ResourceCard extends Card {
     public function hideFromIndex($callback = true)
     {
         $this->showOnIndex = is_callable($callback) ? function () use ($callback) {
+            return ! call_user_func_array($callback, func_get_args());
+        }
+        : ! $callback;
+
+        return $this;
+    }
+
+    /**
+     * Specify that the element should be hidden from the lens view.
+     *
+     * @param  (callable():bool)|bool  $callback
+     * @return $this
+     */
+    public function hideFromLens($callback = true)
+    {
+        $this->showOnLens = is_callable($callback) ? function () use ($callback) {
             return ! call_user_func_array($callback, func_get_args());
         }
         : ! $callback;
@@ -147,6 +178,22 @@ class ResourceCard extends Card {
         return $this;
     }
 
+    /**
+     * Specify that the element should be hidden from the dashboard.
+     *
+     * @param  (callable():bool)|bool  $callback
+     * @return $this
+     */
+    public function hideFromDashboard($callback = true)
+    {
+        $this->showOnDashboard = is_callable($callback) ? function () use ($callback) {
+            return ! call_user_func_array($callback, func_get_args());
+        }
+        : ! $callback;
+
+        return $this;
+    }
+
 
 
     /**
@@ -158,6 +205,19 @@ class ResourceCard extends Card {
     public function showOnIndex($callback = true)
     {
         $this->showOnIndex = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Specify that the element should be hidden from the lens view.
+     *
+     * @param  (callable():bool)|bool  $callback
+     * @return $this
+     */
+    public function showOnLens($callback = true)
+    {
+        $this->showOnLens = $callback;
 
         return $this;
     }
@@ -228,6 +288,19 @@ class ResourceCard extends Card {
     }
 
     /**
+     * Specify that the element should be hidden from the attach view.
+     *
+     * @param  (callable(\Laravel\Nova\Http\Requests\NovaRequest, mixed):bool)|bool  $callback
+     * @return $this
+     */
+    public function showOnDashboard($callback = true)
+    {
+        $this->showOnDashboard = $callback;
+
+        return $this;
+    }
+
+    /**
      * Check for showing when updating.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -257,6 +330,22 @@ class ResourceCard extends Card {
         }
 
         return $this->showOnIndex;
+    }
+
+        /**
+     * Check showing on Lens.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @param  mixed  $resource
+     * @return bool
+     */
+    public function isShownOnLens(NovaRequest $request, $resource): bool
+    {
+        if (is_callable($this->showOnLens)) {
+            $this->showOnLens = call_user_func($this->showOnLens, $request, $resource);
+        }
+
+        return $this->showOnLens;
     }
 
     /**
@@ -333,6 +422,21 @@ class ResourceCard extends Card {
     }
 
     /**
+     * Check for showing when on dashboard.
+     *
+     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
+     * @return bool
+     */
+    public function isShownOnDashboard(NovaRequest $request): bool
+    {
+        if (is_callable($this->showOnDashboard)) {
+            $this->showOnDashboard = call_user_func($this->showOnAttach, $request);
+        }
+
+        return $this->showOnDashboard;
+    }
+
+    /**
      * Specify that the element should only be shown on the index view.
      *
      * @return $this
@@ -345,6 +449,46 @@ class ResourceCard extends Card {
         $this->showOnUpdate = false;
         $this->showOnReplicate = false;
         $this->showOnAttach = false;
+        $this->showOnLens = false;
+        $this->showOnDashboard = false;
+
+        return $this;
+    }
+
+        /**
+     * Specify that the element should only be shown on the lens view.
+     *
+     * @return $this
+     */
+    public function onlyOnLens()
+    {
+        $this->showOnIndex = false;
+        $this->showOnDetail = false;
+        $this->showOnCreation = false;
+        $this->showOnUpdate = false;
+        $this->showOnReplicate = false;
+        $this->showOnAttach = false;
+        $this->showOnLens = true;
+        $this->showOnDashboard = false;
+
+        return $this;
+    }
+
+    /**
+     * Specify that the element should only be shown on the dashboard view.
+     *
+     * @return $this
+     */
+    public function onlyOnDashboard()
+    {
+        $this->showOnIndex = false;
+        $this->showOnDetail = false;
+        $this->showOnCreation = false;
+        $this->showOnUpdate = false;
+        $this->showOnReplicate = false;
+        $this->showOnAttach = false;
+        $this->showOnLens = false;
+        $this->showOnDashboard = true;
 
         return $this;
     }
@@ -364,6 +508,8 @@ class ResourceCard extends Card {
         $this->showOnUpdate = false;
         $this->showOnReplicate = false;
         $this->showOnAttach = false;
+        $this->showOnLens = false;
+        $this->showOnDashboard = false;
 
         return $this;
     }
@@ -381,6 +527,8 @@ class ResourceCard extends Card {
         $this->showOnUpdate = true;
         $this->showOnReplicate = true;
         $this->showOnAttach = true;
+        $this->showOnLens = false;
+        $this->showOnDashboard = false;
 
         return $this;
     }
@@ -398,6 +546,8 @@ class ResourceCard extends Card {
         $this->showOnUpdate = false;
         $this->showOnReplicate = false;
         $this->showOnAttach = false;
+        $this->showOnLens = true;
+        $this->showOnDashboard = true;
 
         return $this;
     }
@@ -411,6 +561,8 @@ class ResourceCard extends Card {
             "showOnUpdate" => $this->showOnUpdate,
             "showOnAttach" => $this->showOnAttach,
             "showOnReplicate" => $this->showOnReplicate,
+            "showOnLens" => $this->showOnLens,
+            "showOnDashboard" => $this->showOnDashboard,
         ], parent::jsonSerialize());
         $jsonReturn['onlyOnDetail'] = null;
         return $jsonReturn;
